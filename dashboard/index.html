@@ -3,43 +3,45 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>CloudSentinel | Zero-Trust Gatekeeper & FinOps Optimizer</title>
+  <title>CloudSentinel — Zero-Trust DevSecOps Gatekeeper & FinOps Optimizer</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:ital,wght@0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
   <style>
+    /* ==========================================================================
+       Linear / Vercel Neutral Zinc Design System
+       ========================================================================== */
     :root {
-      --bg-base: #090a0f;
-      --bg-surface: #12141c;
-      --bg-surface-elevated: #161924;
-      --bg-code: #0b0d14;
-      --border-subtle: #1f2430;
-      --border-focus: #2e3547;
-      --border-active: #3b82f6;
+      --bg-canvas: #09090b;
+      --bg-surface: #18181b;
+      --bg-surface-elevated: #202024;
+      --bg-code: #0d0d11;
 
-      --text-main: #e2e8f0;
-      --text-muted: #94a3b8;
-      --text-dim: #64748b;
+      --border-subtle: #27272a;
+      --border-focus: #3f3f46;
+      --border-active: #52525b;
 
-      --pill-green-bg: #0d2818;
-      --pill-green-border: #1b4332;
-      --pill-green-text: #2ecc71;
+      --text-primary: #fafafa;
+      --text-secondary: #a1a1aa;
+      --text-muted: #71717a;
+      --text-dim: #52525b;
 
-      --pill-red-bg: #2c0b0e;
-      --pill-red-border: #49121a;
-      --pill-red-text: #f87171;
+      /* Muted engineering status colors */
+      --emerald-bg: rgba(16, 185, 129, 0.1);
+      --emerald-border: rgba(16, 185, 129, 0.25);
+      --emerald-text: #34d399;
 
-      --pill-amber-bg: #2a1b07;
-      --pill-amber-border: #452c0a;
-      --pill-amber-text: #fbbf24;
+      --rose-bg: rgba(244, 63, 94, 0.1);
+      --rose-border: rgba(244, 63, 94, 0.25);
+      --rose-text: #fb7185;
 
-      --pill-blue-bg: #082029;
-      --pill-blue-border: #0c3f50;
-      --pill-blue-text: #38bdf8;
+      --amber-bg: rgba(245, 158, 11, 0.1);
+      --amber-border: rgba(245, 158, 11, 0.25);
+      --amber-text: #fbbf24;
 
-      --accent-blue: #2563eb;
-      --accent-blue-hover: #1d4ed8;
-      --accent-green: #10b981;
+      --sky-bg: rgba(14, 165, 233, 0.1);
+      --sky-border: rgba(14, 165, 233, 0.25);
+      --sky-text: #38bdf8;
     }
 
     * {
@@ -49,13 +51,16 @@
     }
 
     body {
-      background-color: var(--bg-base);
-      color: var(--text-main);
-      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      background-color: var(--bg-canvas);
+      color: var(--text-primary);
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
       font-size: 13px;
       line-height: 1.5;
       -webkit-font-smoothing: antialiased;
-      overflow-x: hidden;
+      -moz-osx-font-smoothing: grayscale;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
     }
 
     /* Scrollbars */
@@ -64,579 +69,653 @@
       height: 6px;
     }
     ::-webkit-scrollbar-track {
-      background: var(--bg-base);
+      background: var(--bg-canvas);
     }
     ::-webkit-scrollbar-thumb {
-      background: var(--border-subtle);
+      background: #27272a;
       border-radius: 3px;
     }
     ::-webkit-scrollbar-thumb:hover {
-      background: var(--border-focus);
+      background: #3f3f46;
     }
 
-    /* Top Navigation Bar */
-    header.top-nav {
-      background-color: var(--bg-surface);
+    /* ==========================================================================
+       Header
+       ========================================================================== */
+    header.app-header {
+      height: 60px;
+      background: var(--bg-canvas);
       border-bottom: 1px solid var(--border-subtle);
-      padding: 0 24px;
-      height: 56px;
+      display: flex;
+      align-items: center;
+      position: sticky;
+      top: 0;
+      z-index: 50;
+    }
+
+    .header-inner {
+      max-width: 1440px;
+      width: 100%;
+      margin: 0 auto;
+      padding: 0 32px;
       display: flex;
       align-items: center;
       justify-content: space-between;
-      position: sticky;
-      top: 0;
-      z-index: 100;
     }
 
-    .brand-section {
+    .brand-wrap {
       display: flex;
       align-items: center;
       gap: 12px;
     }
 
-    .brand-logo {
+    .brand-icon {
       width: 28px;
       height: 28px;
-      background: #1e293b;
-      border: 1px solid #334155;
-      border-radius: 4px;
+      background: var(--bg-surface);
+      border: 1px solid var(--border-subtle);
+      border-radius: 6px;
       display: flex;
       align-items: center;
       justify-content: center;
+      color: var(--text-primary);
+      font-family: 'JetBrains Mono', monospace;
       font-weight: 700;
-      font-size: 14px;
-      color: #38bdf8;
+      font-size: 12px;
+      letter-spacing: -0.05em;
     }
 
     .brand-title {
       font-size: 14px;
       font-weight: 600;
+      color: var(--text-primary);
       letter-spacing: -0.01em;
-      color: var(--text-main);
+    }
+
+    .brand-divider {
+      color: var(--border-focus);
+      font-size: 14px;
+      user-select: none;
     }
 
     .brand-subtitle {
-      color: var(--text-dim);
-      font-size: 12px;
+      font-size: 13px;
+      color: var(--text-secondary);
       font-weight: 400;
-      margin-left: 6px;
-      padding-left: 8px;
-      border-left: 1px solid var(--border-subtle);
     }
 
-    .nav-status-group {
+    .header-controls {
       display: flex;
       align-items: center;
       gap: 16px;
     }
 
-    .status-badge {
+    .status-pill-group {
       display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .engine-status-tag {
+      display: inline-flex;
       align-items: center;
       gap: 6px;
       font-size: 11px;
       font-family: 'JetBrains Mono', monospace;
-      padding: 3px 8px;
-      border-radius: 4px;
-      background: #141720;
+      color: var(--text-secondary);
+      background: var(--bg-surface);
       border: 1px solid var(--border-subtle);
-      color: var(--text-muted);
+      padding: 4px 10px;
+      border-radius: 20px;
     }
 
-    .dot-pulse {
-      width: 7px;
-      height: 7px;
+    .live-dot {
+      width: 6px;
+      height: 6px;
       border-radius: 50%;
-      background-color: #10b981;
+      background: #10b981;
       box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.4);
-      animation: pulse-green 2s infinite;
+      animation: pulse-ring 2s infinite;
     }
 
-    @keyframes pulse-green {
-      0% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.6); }
-      70% { box-shadow: 0 0 0 5px rgba(16, 185, 129, 0); }
+    @keyframes pulse-ring {
+      0% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.5); }
+      70% { box-shadow: 0 0 0 4px rgba(16, 185, 129, 0); }
       100% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0); }
     }
 
-    .btn-audit-top {
-      background-color: #2563eb;
-      color: #ffffff;
-      border: 1px solid #3b82f6;
-      border-radius: 4px;
-      padding: 6px 14px;
+    .btn-audit-main {
+      background: #fafafa;
+      color: #09090b;
+      border: 1px solid #ffffff;
+      border-radius: 6px;
+      padding: 7px 14px;
       font-size: 12px;
       font-weight: 500;
-      cursor: pointer;
-      display: flex;
+      display: inline-flex;
       align-items: center;
       gap: 6px;
+      cursor: pointer;
       transition: all 0.15s ease;
     }
 
-    .btn-audit-top:hover {
-      background-color: #1d4ed8;
-      border-color: #60a5fa;
+    .btn-audit-main:hover {
+      background: #e4e4e7;
     }
 
-    /* Metrics Strip */
-    .metrics-container {
-      padding: 16px 24px;
+    /* ==========================================================================
+       Layout Container
+       ========================================================================== */
+    .app-container {
+      max-width: 1440px;
+      width: 100%;
+      margin: 0 auto;
+      padding: 24px 32px 32px;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    /* ==========================================================================
+       Metric Cards (Top Row)
+       ========================================================================== */
+    .metrics-grid {
       display: grid;
       grid-template-columns: repeat(4, 1fr);
-      gap: 12px;
+      gap: 16px;
     }
 
-    .metric-card {
+    .card {
       background: var(--bg-surface);
       border: 1px solid var(--border-subtle);
-      border-radius: 6px;
-      padding: 14px 16px;
+      border-radius: 8px;
+      padding: 18px 20px;
       display: flex;
       flex-direction: column;
       justify-content: space-between;
-      min-height: 84px;
+      min-height: 108px;
       transition: border-color 0.15s ease;
     }
 
-    .metric-card:hover {
+    .card:hover {
       border-color: var(--border-focus);
     }
 
-    .metric-label {
+    .card-label {
       font-size: 11px;
       font-weight: 500;
-      color: var(--text-dim);
       text-transform: uppercase;
-      letter-spacing: 0.05em;
+      letter-spacing: 0.06em;
+      color: var(--text-muted);
     }
 
-    .metric-value-row {
+    .card-metric-line {
       display: flex;
       align-items: baseline;
+      justify-content: space-between;
       gap: 8px;
-      margin-top: 4px;
+      margin: 8px 0 4px;
     }
 
-    .metric-value {
-      font-size: 18px;
+    .card-number {
+      font-size: 22px;
       font-weight: 600;
       font-family: 'JetBrains Mono', monospace;
-      color: var(--text-main);
+      color: var(--text-primary);
+      letter-spacing: -0.02em;
     }
 
-    .metric-pill {
-      font-size: 10px;
-      font-weight: 600;
+    .tag-pill {
+      font-size: 10.5px;
       font-family: 'JetBrains Mono', monospace;
-      padding: 2px 6px;
-      border-radius: 3px;
+      font-weight: 500;
+      padding: 2px 8px;
+      border-radius: 12px;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
     }
 
-    .pill-green {
-      background: var(--pill-green-bg);
-      border: 1px solid var(--pill-green-border);
-      color: var(--pill-green-text);
+    .tag-emerald {
+      background: var(--emerald-bg);
+      border: 1px solid var(--emerald-border);
+      color: var(--emerald-text);
     }
 
-    .pill-red {
-      background: var(--pill-red-bg);
-      border: 1px solid var(--pill-red-border);
-      color: var(--pill-red-text);
+    .tag-rose {
+      background: var(--rose-bg);
+      border: 1px solid var(--rose-border);
+      color: var(--rose-text);
     }
 
-    .pill-amber {
-      background: var(--pill-amber-bg);
-      border: 1px solid var(--pill-amber-border);
-      color: var(--pill-amber-text);
+    .tag-amber {
+      background: var(--amber-bg);
+      border: 1px solid var(--amber-border);
+      color: var(--amber-text);
     }
 
-    .pill-blue {
-      background: var(--pill-blue-bg);
-      border: 1px solid var(--pill-blue-border);
-      color: var(--pill-blue-text);
+    .tag-sky {
+      background: var(--sky-bg);
+      border: 1px solid var(--sky-border);
+      color: var(--sky-text);
     }
 
-    .metric-subtext {
-      font-size: 11px;
-      color: var(--text-muted);
-      margin-top: 2px;
+    .card-subtext {
+      font-size: 11.5px;
+      color: var(--text-secondary);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
     }
 
-    /* Main Workspace */
-    .workspace-grid {
-      padding: 0 24px 24px;
+    /* ==========================================================================
+       Main Workspace: 2-Column Split
+       ========================================================================== */
+    .workspace-split {
       display: grid;
-      grid-template-columns: 1.05fr 1fr;
+      grid-template-columns: 1.08fr 1fr;
       gap: 16px;
-      height: calc(100vh - 176px);
-      min-height: 580px;
+      flex: 1;
+      min-height: 600px;
     }
 
-    .panel-card {
+    .console-panel {
       background: var(--bg-surface);
       border: 1px solid var(--border-subtle);
-      border-radius: 6px;
+      border-radius: 8px;
       display: flex;
       flex-direction: column;
       overflow: hidden;
     }
 
-    .panel-header {
-      padding: 10px 16px;
-      background: var(--bg-surface-elevated);
+    .panel-topbar {
+      height: 48px;
+      padding: 0 16px;
+      background: var(--bg-surface);
       border-bottom: 1px solid var(--border-subtle);
       display: flex;
       align-items: center;
       justify-content: space-between;
-      min-height: 48px;
     }
 
-    .panel-title-area {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-    }
-
-    .panel-title {
-      font-size: 12px;
-      font-weight: 600;
-      text-transform: uppercase;
-      letter-spacing: 0.05em;
-      color: var(--text-muted);
-    }
-
-    .file-select {
-      background: #0d0f17;
-      border: 1px solid var(--border-subtle);
-      border-radius: 4px;
-      color: var(--text-main);
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 11px;
-      padding: 5px 10px;
-      outline: none;
-      cursor: pointer;
-    }
-
-    .file-select:focus {
-      border-color: var(--border-active);
-    }
-
-    .action-toolbar {
+    .panel-filename-box {
       display: flex;
       align-items: center;
       gap: 8px;
     }
 
-    .btn-action {
-      background: #181b26;
+    .file-dropdown-select {
+      background: var(--bg-canvas);
       border: 1px solid var(--border-subtle);
-      border-radius: 4px;
-      color: var(--text-main);
-      font-size: 11px;
-      font-weight: 500;
-      padding: 5px 10px;
+      border-radius: 6px;
+      color: var(--text-primary);
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11.5px;
+      padding: 6px 12px;
+      outline: none;
       cursor: pointer;
+      transition: border-color 0.15s ease;
+    }
+
+    .file-dropdown-select:hover {
+      border-color: var(--border-focus);
+    }
+
+    .file-dropdown-select:focus {
+      border-color: var(--border-active);
+    }
+
+    .btn-pill-group {
       display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .btn-pill {
+      background: var(--bg-canvas);
+      border: 1px solid var(--border-subtle);
+      border-radius: 6px;
+      color: var(--text-primary);
+      font-size: 11.5px;
+      font-weight: 500;
+      padding: 5px 12px;
+      cursor: pointer;
+      display: inline-flex;
       align-items: center;
       gap: 6px;
       transition: all 0.15s ease;
     }
 
-    .btn-action:hover {
-      background: #202434;
+    .btn-pill:hover {
+      background: var(--bg-surface-elevated);
       border-color: var(--border-focus);
     }
 
-    .btn-action.primary {
-      background: #2563eb;
-      border-color: #3b82f6;
-      color: #fff;
+    .btn-pill.primary {
+      background: #fafafa;
+      color: #09090b;
+      border-color: #ffffff;
+      font-weight: 600;
     }
 
-    .btn-action.primary:hover {
-      background: #1d4ed8;
+    .btn-pill.primary:hover {
+      background: #e4e4e7;
     }
 
-    .btn-action.patch {
-      background: #132e22;
-      border-color: #1f573c;
-      color: #4ade80;
+    .btn-pill.patch-action {
+      background: rgba(16, 185, 129, 0.12);
+      border-color: rgba(16, 185, 129, 0.3);
+      color: #34d399;
+      font-weight: 600;
     }
 
-    .btn-action.patch:hover {
-      background: #1a3f2f;
-      border-color: #22c55e;
+    .btn-pill.patch-action:hover {
+      background: rgba(16, 185, 129, 0.2);
+      border-color: rgba(16, 185, 129, 0.5);
     }
 
-    /* Code Viewer */
-    .editor-container {
+    /* Code View Area */
+    .editor-wrapper {
       flex: 1;
-      position: relative;
       background: var(--bg-code);
       overflow: auto;
       font-family: 'JetBrains Mono', monospace;
       font-size: 11.5px;
-      line-height: 1.6;
+      line-height: 1.65;
     }
 
-    .code-table {
-      border-collapse: collapse;
+    .code-grid-table {
       width: 100%;
+      border-collapse: collapse;
     }
 
-    .line-number {
+    .code-line-num {
       width: 44px;
-      padding: 0 12px 0 0;
+      padding: 0 14px 0 0;
       text-align: right;
-      color: #3b4252;
+      color: var(--text-dim);
       user-select: none;
-      border-right: 1px solid #161a24;
-      background: #090a0f;
+      border-right: 1px solid #1c1c24;
+      background: #09090b;
+      font-size: 11px;
     }
 
-    .code-content {
+    .code-line-text {
       padding: 0 16px;
-      color: #cbd5e1;
+      color: #d4d4d8;
       white-space: pre;
     }
 
-    /* Right Column: Telemetry & Tabs */
-    .telemetry-tabs {
+    /* Syntax highlight colors */
+    .hl-key { color: #93c5fd; }
+    .hl-string { color: #86efac; }
+    .hl-type { color: #fde047; }
+    .hl-num { color: #fed7aa; }
+    .hl-bool { color: #f472b6; }
+    .hl-comment { color: #71717a; font-style: italic; }
+
+    /* ==========================================================================
+       Right Panel: Telemetry & Tabs (Linear Style)
+       ========================================================================== */
+    .telemetry-tabs-nav {
       display: flex;
       align-items: center;
-      gap: 4px;
+      gap: 16px;
     }
 
-    .telemetry-tab {
+    .tab-linear-btn {
       background: transparent;
-      border: 1px solid transparent;
-      border-radius: 4px;
-      color: var(--text-dim);
-      font-size: 11px;
+      border: none;
+      border-bottom: 2px solid transparent;
+      color: var(--text-muted);
+      font-size: 12px;
       font-weight: 500;
-      padding: 4px 10px;
+      padding: 13px 4px;
       cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
       transition: all 0.15s ease;
+      position: relative;
+      top: 1px;
     }
 
-    .telemetry-tab:hover {
-      color: var(--text-main);
+    .tab-linear-btn:hover {
+      color: var(--text-primary);
     }
 
-    .telemetry-tab.active {
-      background: #1c202e;
-      border-color: var(--border-subtle);
-      color: var(--text-main);
+    .tab-linear-btn.active {
+      color: var(--text-primary);
+      border-bottom-color: #fafafa;
     }
 
-    .telemetry-body {
+    .tab-badge {
+      font-size: 10px;
+      font-family: 'JetBrains Mono', monospace;
+      padding: 1px 5px;
+      border-radius: 10px;
+      background: #27272a;
+      color: var(--text-secondary);
+    }
+
+    .tab-linear-btn.active .tab-badge {
+      background: #3f3f46;
+      color: var(--text-primary);
+    }
+
+    .telemetry-stage {
       flex: 1;
-      overflow-y: auto;
       display: flex;
       flex-direction: column;
+      overflow-y: auto;
     }
 
     /* Verdict Banner */
-    .verdict-banner {
-      padding: 12px 16px;
+    .telemetry-verdict-bar {
+      padding: 12px 18px;
+      background: #141417;
       border-bottom: 1px solid var(--border-subtle);
       display: flex;
       align-items: center;
       justify-content: space-between;
-      background: #10121a;
     }
 
-    .verdict-status {
+    .verdict-left {
       display: flex;
       align-items: center;
       gap: 10px;
     }
 
-    .verdict-badge {
-      font-size: 11px;
-      font-weight: 700;
-      font-family: 'JetBrains Mono', monospace;
-      padding: 3px 8px;
-      border-radius: 3px;
-      letter-spacing: 0.05em;
+    .verdict-status-title {
+      font-size: 12.5px;
+      font-weight: 600;
+      color: var(--text-primary);
     }
 
-    .verdict-meta {
+    .verdict-timer-box {
       font-family: 'JetBrains Mono', monospace;
       font-size: 11px;
-      color: var(--text-muted);
+      color: var(--text-secondary);
     }
 
-    /* Policy Findings Table */
-    .findings-container {
+    /* Findings Table */
+    .findings-scroll-table {
       flex: 1;
       overflow-y: auto;
     }
 
-    table.findings-table {
+    table.findings-data-table {
       width: 100%;
       border-collapse: collapse;
       text-align: left;
-      font-size: 11.5px;
+      font-size: 12px;
     }
 
-    table.findings-table th {
-      background: #11141e;
-      color: var(--text-dim);
+    table.findings-data-table th {
+      background: var(--bg-surface);
+      color: var(--text-muted);
       font-weight: 600;
       text-transform: uppercase;
-      letter-spacing: 0.05em;
+      letter-spacing: 0.06em;
       font-size: 10px;
-      padding: 8px 14px;
+      padding: 10px 16px;
       border-bottom: 1px solid var(--border-subtle);
       position: sticky;
       top: 0;
       z-index: 10;
     }
 
-    table.findings-table td {
-      padding: 10px 14px;
-      border-bottom: 1px solid #171b26;
+    table.findings-data-table td {
+      padding: 14px 16px;
+      border-bottom: 1px solid #202025;
       vertical-align: top;
     }
 
-    table.findings-table tr:hover td {
-      background: #141722;
+    table.findings-data-table tr:hover td {
+      background: #1c1c21;
     }
 
-    .resource-cell {
+    .code-tag-res {
       font-family: 'JetBrains Mono', monospace;
+      font-size: 11.5px;
       font-weight: 600;
       color: #93c5fd;
+      background: rgba(147, 197, 253, 0.08);
+      padding: 2px 6px;
+      border-radius: 4px;
+      border: 1px solid rgba(147, 197, 253, 0.2);
     }
 
-    .rule-cell {
+    .code-tag-rule {
       font-family: 'JetBrains Mono', monospace;
-      color: #cbd5e1;
       font-size: 11px;
+      color: #a1a1aa;
     }
 
-    .reason-desc {
-      color: var(--text-main);
-      margin-bottom: 4px;
-    }
-
-    .recommendation-fix {
-      color: var(--text-muted);
-      font-size: 11px;
-      display: flex;
-      align-items: flex-start;
-      gap: 4px;
-    }
-
-    .fix-icon {
-      color: #10b981;
+    .finding-desc-text {
+      color: var(--text-primary);
+      margin-bottom: 6px;
       font-size: 12px;
     }
 
-    /* Unified Diff Viewer */
-    .diff-container {
+    .finding-fix-text {
+      color: var(--text-secondary);
+      font-size: 11px;
+      display: flex;
+      align-items: flex-start;
+      gap: 6px;
+      background: #121215;
+      padding: 6px 10px;
+      border-radius: 4px;
+      border: 1px solid #222228;
+    }
+
+    .fix-arrow {
+      color: #10b981;
+      font-weight: 700;
+    }
+
+    /* Unified Diff */
+    .unified-diff-view {
       flex: 1;
-      background: #0a0b10;
-      padding: 12px;
+      background: #0d0d11;
+      padding: 16px;
       overflow: auto;
       font-family: 'JetBrains Mono', monospace;
       font-size: 11px;
       line-height: 1.6;
     }
 
-    .diff-header-line {
-      color: #94a3b8;
-      font-weight: 600;
-      margin-bottom: 8px;
-      padding-bottom: 4px;
-      border-bottom: 1px solid #1e2433;
+    .diff-meta-strip {
+      color: var(--text-secondary);
+      font-size: 11px;
+      margin-bottom: 12px;
+      padding-bottom: 8px;
+      border-bottom: 1px solid #27272a;
     }
 
-    .diff-chunk {
+    .diff-badge-header {
+      background: rgba(14, 165, 233, 0.12);
+      border: 1px solid rgba(14, 165, 233, 0.3);
       color: #38bdf8;
-      background: #082029;
-      padding: 2px 4px;
-      margin: 4px 0;
+      padding: 2px 6px;
+      border-radius: 3px;
       display: inline-block;
-      border-radius: 2px;
+      margin-bottom: 6px;
     }
 
-    .diff-add {
+    .diff-row-add {
       background: rgba(16, 185, 129, 0.12);
       color: #4ade80;
       display: block;
-      padding: 0 4px;
+      padding: 0 6px;
       border-left: 2px solid #22c55e;
     }
 
-    .diff-del {
-      background: rgba(239, 68, 68, 0.12);
-      color: #f87171;
+    .diff-row-del {
+      background: rgba(244, 63, 94, 0.12);
+      color: #fb7185;
       display: block;
-      padding: 0 4px;
-      border-left: 2px solid #ef4444;
+      padding: 0 6px;
+      border-left: 2px solid #f43f5e;
     }
 
-    .diff-normal {
-      color: #64748b;
+    .diff-row-ctx {
+      color: var(--text-muted);
       display: block;
-      padding: 0 4px;
+      padding: 0 6px;
     }
 
-    /* Moto Sandbox Log */
-    .sandbox-log {
+    /* Moto Logs */
+    .moto-log-stream {
       flex: 1;
-      background: #07080c;
-      padding: 14px;
+      background: #09090c;
+      padding: 16px;
       overflow-y: auto;
       font-family: 'JetBrains Mono', monospace;
       font-size: 11px;
       line-height: 1.7;
-      color: #94a3b8;
     }
 
-    .log-line {
+    .log-item {
       display: flex;
       gap: 12px;
       margin-bottom: 2px;
     }
 
-    .log-time {
-      color: #475569;
+    .log-timestamp {
+      color: #52525b;
       user-select: none;
     }
 
-    .log-tag {
-      font-weight: 600;
-    }
-    .log-tag.s3 { color: #38bdf8; }
-    .log-tag.iam { color: #c084fc; }
-    .log-tag.ec2 { color: #fb923c; }
-    .log-tag.finops { color: #4ade80; }
-    .log-tag.notice { color: #f87171; }
+    .tag-s3 { color: #38bdf8; }
+    .tag-iam { color: #c084fc; }
+    .tag-ec2 { color: #fb923c; }
+    .tag-finops { color: #4ade80; }
+    .tag-warn { color: #fb7185; }
 
-    /* Footer Toast / Alert */
-    .toast-alert {
+    /* Toast */
+    .floating-toast {
       position: fixed;
-      bottom: 20px;
-      right: 24px;
-      background: #141724;
-      border: 1px solid #2d354a;
-      border-radius: 4px;
+      bottom: 24px;
+      right: 32px;
+      background: #18181b;
+      border: 1px solid var(--border-subtle);
+      border-radius: 6px;
       padding: 10px 16px;
       display: flex;
       align-items: center;
       gap: 10px;
-      box-shadow: 0 4px 16px rgba(0,0,0,0.5);
-      z-index: 999;
-      transform: translateY(100px);
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6);
+      z-index: 100;
+      transform: translateY(80px);
       opacity: 0;
-      transition: all 0.25s ease;
+      transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
       font-size: 12px;
     }
 
-    .toast-alert.show {
+    .floating-toast.visible {
       transform: translateY(0);
       opacity: 1;
     }
@@ -644,182 +723,212 @@
 </head>
 <body>
 
-  <!-- Top Navigation Bar -->
-  <header class="top-nav">
-    <div class="brand-section">
-      <div class="brand-logo">CS</div>
-      <div class="brand-title">CloudSentinel</div>
-      <div class="brand-subtitle">Autonomous Zero-Trust DevSecOps Gatekeeper & FinOps Optimizer</div>
-    </div>
+  <!-- ========================================================================
+       Top Navigation Bar (Linear / Vercel Style)
+       ======================================================================== -->
+  <header class="app-header">
+    <div class="header-inner">
+      <div class="brand-wrap">
+        <div class="brand-icon">CS</div>
+        <span class="brand-title">CloudSentinel</span>
+        <span class="brand-divider">/</span>
+        <span class="brand-subtitle">Zero-Trust DevSecOps Gatekeeper &amp; FinOps Optimizer</span>
+      </div>
 
-    <div class="nav-status-group">
-      <div class="status-badge">
-        <div class="dot-pulse"></div>
-        <span>FastMCP: Active</span>
+      <div class="header-controls">
+        <div class="status-pill-group">
+          <div class="engine-status-tag">
+            <span class="live-dot"></span>
+            <span>FastMCP: Active</span>
+          </div>
+          <div class="engine-status-tag">
+            <span class="live-dot"></span>
+            <span>Moto Sandbox: In-Memory</span>
+          </div>
+        </div>
+
+        <button class="btn-audit-main" onclick="runZeroTrustAudit()">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+          Trigger Zero-Trust Audit
+        </button>
       </div>
-      <div class="status-badge">
-        <div class="dot-pulse"></div>
-        <span>Moto Sandbox: In-Memory</span>
-      </div>
-      <button class="btn-audit-top" id="btnRunAuditTop" onclick="runZeroTrustAudit()">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
-        Trigger Zero-Trust Audit
-      </button>
     </div>
   </header>
 
-  <!-- Metrics Strip -->
-  <section class="metrics-container">
-    <div class="metric-card">
-      <div class="metric-label">IaC Policy Status</div>
-      <div class="metric-value-row">
-        <div class="metric-value" id="metricPolicyStatus">NON-COMPLIANT</div>
-        <span class="metric-pill pill-red" id="metricViolationsPill">2 Critical</span>
-      </div>
-      <div class="metric-subtext" id="metricPolicySubtext">AWS Cedar fail-closed evaluation</div>
-    </div>
+  <!-- ========================================================================
+       Main Content Container
+       ======================================================================== -->
+  <div class="app-container">
 
-    <div class="metric-card">
-      <div class="metric-label">FinOps Projected Savings</div>
-      <div class="metric-value-row">
-        <div class="metric-value" id="metricFinOpsSavings">$5,886 / yr</div>
-        <span class="metric-pill pill-green">-87.5% Compute</span>
-      </div>
-      <div class="metric-subtext">Rightsizing m5.4xlarge → m5.large + Orphaned EBS</div>
-    </div>
-
-    <div class="metric-card">
-      <div class="metric-label">Last Sandbox Run</div>
-      <div class="metric-value-row">
-        <div class="metric-value" id="metricLatency">1.4 ms</div>
-        <span class="metric-pill pill-blue">Zero Cloud Cost</span>
-      </div>
-      <div class="metric-subtext">Deterministic in-memory Moto synthesis</div>
-    </div>
-
-    <div class="metric-card">
-      <div class="metric-label">Active Gate</div>
-      <div class="metric-value-row">
-        <div class="metric-value">HUMAN-IN-LOOP</div>
-        <span class="metric-pill pill-amber">READY_FOR_DEPLOYMENT</span>
-      </div>
-      <div class="metric-subtext">Destructive mutations gated until approval</div>
-    </div>
-  </section>
-
-  <!-- Main Workspace -->
-  <main class="workspace-grid">
-    
-    <!-- Left Column: IaC Template Inspector -->
-    <section class="panel-card">
-      <div class="panel-header">
-        <div class="panel-title-area">
-          <span class="panel-title">Target Template</span>
-          <select class="file-select" id="fileSelector" onchange="onFileChange()">
-            <option value="vulnerable.json" selected>examples/vulnerable.json</option>
-            <option value="insecure_template.yaml">examples/insecure_template.yaml</option>
-            <option value="compliant_template.yaml">examples/compliant_template.yaml</option>
-          </select>
+    <!-- Metric Cards (Spacious 4-Card Strip) -->
+    <section class="metrics-grid">
+      <div class="card">
+        <div class="card-label">IaC Policy Status</div>
+        <div class="card-metric-line">
+          <span class="card-number" id="metricStatusNum">NON-COMPLIANT</span>
+          <span class="tag-pill tag-rose" id="metricStatusPill">2 Critical</span>
         </div>
-
-        <div class="action-toolbar">
-          <button class="btn-action primary" onclick="runZeroTrustAudit()">
-            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polygon points="10 8 16 12 10 16 10 8"/></svg>
-            Audit
-          </button>
-          <button class="btn-action" onclick="simulateSandbox()">
-            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg>
-            Sandbox
-          </button>
-          <button class="btn-action patch" onclick="applyRemediationPatch()">
-            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg>
-            Apply Patch
-          </button>
-        </div>
+        <div class="card-subtext" id="metricStatusSubtext">AWS Cedar fail-closed evaluation</div>
       </div>
 
-      <div class="editor-container" id="editorContainer">
-        <!-- Rendered Code Table -->
+      <div class="card">
+        <div class="card-label">FinOps Projected Savings</div>
+        <div class="card-metric-line">
+          <span class="card-number">$5,886 / yr</span>
+          <span class="tag-pill tag-emerald">-87.5% Compute</span>
+        </div>
+        <div class="card-subtext">EC2 Rightsizing: m5.4xlarge → m5.large</div>
+      </div>
+
+      <div class="card">
+        <div class="card-label">Last Sandbox Run</div>
+        <div class="card-metric-line">
+          <span class="card-number" id="metricLatencyNum">1.4 ms</span>
+          <span class="tag-pill tag-sky">Zero Cloud Cost</span>
+        </div>
+        <div class="card-subtext">Deterministic Moto in-memory validation</div>
+      </div>
+
+      <div class="card">
+        <div class="card-label">Active Gate</div>
+        <div class="card-metric-line">
+          <span class="card-number">HUMAN-IN-LOOP</span>
+          <span class="tag-pill tag-amber">ENFORCED</span>
+        </div>
+        <div class="card-subtext">READY_FOR_DEPLOYMENT operator gate</div>
       </div>
     </section>
 
-    <!-- Right Column: Real-Time Audit & Simulation Telemetry -->
-    <section class="panel-card">
-      <div class="panel-header">
-        <span class="panel-title">Telemetry & Audit Ledger</span>
-        <div class="telemetry-tabs">
-          <button class="telemetry-tab active" id="tabFindingsBtn" onclick="switchTab('findings')">Findings (<span id="findingsCountBadge">2</span>)</button>
-          <button class="telemetry-tab" id="tabDiffBtn" onclick="switchTab('diff')">Unified Diff</button>
-          <button class="telemetry-tab" id="tabLogBtn" onclick="switchTab('logs')">Moto Sandbox Log</button>
-          <button class="telemetry-tab" id="tabJsonBtn" onclick="switchTab('json')">Raw JSON</button>
-        </div>
-      </div>
+    <!-- Main Workspace (2-Column Split) -->
+    <main class="workspace-split">
 
-      <!-- Verdict Banner -->
-      <div class="verdict-banner" id="verdictBanner">
-        <div class="verdict-status">
-          <span class="verdict-badge pill-red" id="verdictBadge">DENY (FAIL-CLOSED)</span>
-          <span style="font-weight: 600; font-size: 12px;" id="verdictTitle">Zero-Trust Guardrail Violations Detected</span>
-        </div>
-        <div class="verdict-meta" id="verdictMeta">
-          latency: <strong>1.4 ms</strong> | engine: <strong>Cedar Rust</strong>
-        </div>
-      </div>
+      <!-- Left Column: Template Inspector & Editor -->
+      <section class="console-panel">
+        <div class="panel-topbar">
+          <div class="panel-filename-box">
+            <span style="font-size: 11px; font-weight: 500; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.05em;">Template:</span>
+            <select class="file-dropdown-select" id="fileSelectBox" onchange="onFileChange()">
+              <option value="vulnerable.json" selected>examples/vulnerable.json</option>
+              <option value="insecure_template.yaml">examples/insecure_template.yaml</option>
+              <option value="compliant_template.yaml">examples/compliant_template.yaml</option>
+            </select>
+          </div>
 
-      <!-- Tab Content Area -->
-      <div class="telemetry-body">
-
-        <!-- Tab 1: Findings Table -->
-        <div class="findings-container" id="tabFindings">
-          <table class="findings-table">
-            <thead>
-              <tr>
-                <th style="width: 100px;">Severity</th>
-                <th style="width: 180px;">Resource ID</th>
-                <th style="width: 220px;">Cedar Rule ID</th>
-                <th>Reason & Required Remediation</th>
-              </tr>
-            </thead>
-            <tbody id="findingsTableBody">
-              <!-- Dynamically populated -->
-            </tbody>
-          </table>
-        </div>
-
-        <!-- Tab 2: Unified Diff -->
-        <div class="diff-container" id="tabDiff" style="display: none;">
-          <div class="diff-header-line" id="diffHeaderLine">--- a/examples/vulnerable.json (Initial Insecure State)<br>+++ b/examples/vulnerable.json (Security Hardened)</div>
-          <div id="diffContent">
-            <!-- Diff output -->
+          <div class="btn-pill-group">
+            <button class="btn-pill primary" onclick="runZeroTrustAudit()">
+              <svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+              Audit
+            </button>
+            <button class="btn-pill" onclick="simulateSandbox()">
+              <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg>
+              Simulate
+            </button>
+            <button class="btn-pill patch-action" onclick="applyRemediationPatch()">
+              <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg>
+              Remediate
+            </button>
           </div>
         </div>
 
-        <!-- Tab 3: Moto Sandbox Log -->
-        <div class="sandbox-log" id="tabLogs" style="display: none;">
-          <div id="sandboxLogContent">
-            <!-- Log entries -->
+        <div class="editor-wrapper" id="editorWrapper">
+          <!-- Rendered Code Table -->
+        </div>
+      </section>
+
+      <!-- Right Column: Telemetry & Findings -->
+      <section class="console-panel">
+        <div class="panel-topbar">
+          <div class="telemetry-tabs-nav">
+            <button class="tab-linear-btn active" id="tabFindingsBtn" onclick="switchTab('findings')">
+              Findings <span class="tab-badge" id="tabFindingsBadge">2</span>
+            </button>
+            <button class="tab-linear-btn" id="tabDiffBtn" onclick="switchTab('diff')">
+              Unified Diff
+            </button>
+            <button class="tab-linear-btn" id="tabLogBtn" onclick="switchTab('logs')">
+              Moto Logs
+            </button>
+            <button class="tab-linear-btn" id="tabJsonBtn" onclick="switchTab('json')">
+              JSON
+            </button>
+          </div>
+
+          <div style="font-size: 11px; font-family: 'JetBrains Mono', monospace; color: var(--text-muted);" id="fastmcpStatusTag">
+            FastMCP :: Engine Ready
           </div>
         </div>
 
-        <!-- Tab 4: Raw JSON -->
-        <div class="editor-container" id="tabJson" style="display: none;">
-          <pre style="padding: 16px; color: #a5b4fc;" id="rawJsonOutput"></pre>
+        <!-- Telemetry Stage -->
+        <div class="telemetry-stage">
+
+          <!-- Status Banner -->
+          <div class="telemetry-verdict-bar" id="telemetryVerdictBar">
+            <div class="verdict-left">
+              <span class="tag-pill tag-rose" id="verdictPill">DENY (FAIL-CLOSED)</span>
+              <span class="verdict-status-title" id="verdictTitle">Zero-Trust Guardrail Violations Detected</span>
+            </div>
+            <div class="verdict-timer-box" id="verdictTimerBox">
+              latency: <strong>1.4 ms</strong> | engine: <strong>Cedar</strong>
+            </div>
+          </div>
+
+          <!-- Tab 1: Findings Table -->
+          <div class="findings-scroll-table" id="viewFindings">
+            <table class="findings-data-table">
+              <thead>
+                <tr>
+                  <th style="width: 95px;">Severity</th>
+                  <th style="width: 175px;">Resource ID</th>
+                  <th style="width: 215px;">Cedar Policy</th>
+                  <th>Required Remediation</th>
+                </tr>
+              </thead>
+              <tbody id="findingsTableBody">
+                <!-- Dynamically populated -->
+              </tbody>
+            </table>
+          </div>
+
+          <!-- Tab 2: Unified Diff -->
+          <div class="unified-diff-view" id="viewDiff" style="display: none;">
+            <div class="diff-meta-strip" id="diffMetaStrip">
+              <span class="diff-badge-header">Unified Git Diff</span><br>
+              --- a/examples/vulnerable.json (Insecure Input)<br>
+              +++ b/examples/vulnerable.json (Automated Security Remediation)
+            </div>
+            <div id="diffCodeContainer">
+              <!-- Rendered diff -->
+            </div>
+          </div>
+
+          <!-- Tab 3: Moto Logs -->
+          <div class="moto-log-stream" id="viewLogs" style="display: none;">
+            <div id="logStreamContainer">
+              <!-- Rendered logs -->
+            </div>
+          </div>
+
+          <!-- Tab 4: Raw JSON -->
+          <div class="editor-wrapper" id="viewJson" style="display: none;">
+            <pre style="padding: 16px; color: #a5b4fc; font-family: 'JetBrains Mono', monospace; font-size: 11.5px;" id="rawJsonBlock"></pre>
+          </div>
+
         </div>
+      </section>
 
-      </div>
-    </section>
+    </main>
 
-  </main>
+  </div>
 
-  <!-- Notification Toast -->
-  <div class="toast-alert" id="toastAlert">
-    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#22c55e" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
-    <span id="toastMessage">Non-destructive patch applied. Backup saved to .cloudguard/backups/</span>
+  <!-- Toast Notification -->
+  <div class="floating-toast" id="appToast">
+    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#34d399" stroke-width="2.5"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+    <span id="toastText">Audit completed.</span>
   </div>
 
   <script>
-    // In-memory template data store matching our repository files
-    const TEMPLATES = {
+    // Templates database
+    const REPO_TEMPLATES = {
       "vulnerable.json": {
         path: "examples/vulnerable.json",
         format: "cloudformation",
@@ -1137,7 +1246,7 @@ Resources:
       InstanceId: !Ref CompliantApplicationServer
       VolumeId: !Ref CompliantStorageVolume`,
         patched: null,
-        diff: `# Template is already compliant. Zero modifications needed.`,
+        diff: `# Template is hardened and compliant. Zero modifications required.`,
         violations: [],
         logs: [
           "[S3] Verified server-side encryption for 'SecureDataBucket' (compliant-zero-trust-data-lake).",
@@ -1152,232 +1261,244 @@ Resources:
       }
     };
 
-    let currentFileKey = "vulnerable.json";
-    let isCurrentlyPatched = false;
+    let activeKey = "vulnerable.json";
+    let isRemediated = false;
 
-    // Load selected file
     function onFileChange() {
-      const select = document.getElementById("fileSelector");
-      currentFileKey = select.value;
-      isCurrentlyPatched = false;
-      renderEditorContent(TEMPLATES[currentFileKey].initial);
+      const select = document.getElementById("fileSelectBox");
+      activeKey = select.value;
+      isRemediated = false;
+      renderCode(REPO_TEMPLATES[activeKey].initial);
       runZeroTrustAudit();
     }
 
-    // Render code with line numbers
-    function renderEditorContent(content) {
-      const lines = content.split("\n");
-      let html = '<table class="code-table"><tbody>';
-      lines.forEach((line, index) => {
-        const lineNum = index + 1;
-        const escaped = line.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
-        html += `<tr><td class="line-number">${lineNum}</td><td class="code-content">${escaped}</td></tr>`;
+    // Code formatter with syntax tokenization
+    function renderCode(raw) {
+      const lines = raw.split("\n");
+      let html = '<table class="code-grid-table"><tbody>';
+      lines.forEach((line, i) => {
+        const num = i + 1;
+        const formatted = syntaxHighlight(line);
+        html += `<tr><td class="code-line-num">${num}</td><td class="code-line-text">${formatted}</td></tr>`;
       });
       html += '</tbody></table>';
-      document.getElementById("editorContainer").innerHTML = html;
+      document.getElementById("editorWrapper").innerHTML = html;
     }
 
-    // Run Zero-Trust Audit
+    function syntaxHighlight(str) {
+      if (!str.trim()) return '&nbsp;';
+      let escaped = str.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+      
+      // Comments
+      if (escaped.trim().startsWith('#')) {
+        return `<span class="hl-comment">${escaped}</span>`;
+      }
+      
+      // Key: Value
+      escaped = escaped.replace(/(["']?[\w\-]+["']?\s*:)/g, '<span class="hl-key">$1</span>');
+      // AWS Types
+      escaped = escaped.replace(/(AWS::[A-Za-z0-9]+::[A-Za-z0-9]+)/g, '<span class="hl-type">$1</span>');
+      // Strings
+      escaped = escaped.replace(/:\s*(".*?"|'.*?')/g, ': <span class="hl-string">$1</span>');
+      // Booleans
+      escaped = escaped.replace(/\b(true|false|True|False)\b/g, '<span class="hl-bool">$1</span>');
+      // Numbers
+      escaped = escaped.replace(/\b(\d+)\b/g, '<span class="hl-num">$1</span>');
+
+      return escaped;
+    }
+
+    // Run Audit
     function runZeroTrustAudit() {
-      const tpl = TEMPLATES[currentFileKey];
-      const isClean = (currentFileKey === "compliant_template.yaml" || isCurrentlyPatched);
+      const tpl = REPO_TEMPLATES[activeKey];
+      const isClean = (activeKey === "compliant_template.yaml" || isRemediated);
       const violations = isClean ? [] : tpl.violations;
       const count = violations.length;
 
-      // Update Top Metrics Strip
-      const statusVal = document.getElementById("metricPolicyStatus");
-      const statusPill = document.getElementById("metricViolationsPill");
-      const subtext = document.getElementById("metricPolicySubtext");
+      // Update Top Status Card
+      const statusNum = document.getElementById("metricStatusNum");
+      const statusPill = document.getElementById("metricStatusPill");
+      const statusSub = document.getElementById("metricStatusSubtext");
 
       if (isClean) {
-        statusVal.textContent = "COMPLIANT";
-        statusVal.style.color = "#2ecc71";
-        statusPill.className = "metric-pill pill-green";
+        statusNum.textContent = "COMPLIANT";
+        statusNum.style.color = "#34d399";
+        statusPill.className = "tag-pill tag-emerald";
         statusPill.textContent = "0 Violations";
-        subtext.textContent = "Zero-Trust guardrails verified";
+        statusSub.textContent = "All Cedar Zero-Trust rules verified";
       } else {
-        statusVal.textContent = "NON-COMPLIANT";
-        statusVal.style.color = "#f87171";
-        statusPill.className = "metric-pill pill-red";
+        statusNum.textContent = "NON-COMPLIANT";
+        statusNum.style.color = "#fb7185";
+        statusPill.className = "tag-pill tag-rose";
         statusPill.textContent = `${count} Critical`;
-        subtext.textContent = "AWS Cedar fail-closed evaluation";
+        statusSub.textContent = "AWS Cedar fail-closed evaluation";
       }
 
-      // Update Verdict Banner
-      const badge = document.getElementById("verdictBadge");
-      const title = document.getElementById("verdictTitle");
-      const meta = document.getElementById("verdictMeta");
+      // Update Verdict Bar
+      const vPill = document.getElementById("verdictPill");
+      const vTitle = document.getElementById("verdictTitle");
+      const vTimer = document.getElementById("verdictTimerBox");
 
       if (isClean) {
-        badge.className = "verdict-badge pill-green";
-        badge.textContent = "ALLOW (COMPLIANT)";
-        title.textContent = "Infrastructure Satisfies Zero-Trust Cedar Guardrails";
-        meta.innerHTML = "latency: <strong>1.4 ms</strong> | engine: <strong>Cedar Rust</strong>";
+        vPill.className = "tag-pill tag-emerald";
+        vPill.textContent = "ALLOW (COMPLIANT)";
+        vTitle.textContent = "Infrastructure Satisfies Zero-Trust Cedar Guardrails";
+        vTimer.innerHTML = "latency: <strong>1.4 ms</strong> | engine: <strong>Cedar</strong>";
       } else {
-        badge.className = "verdict-badge pill-red";
-        badge.textContent = "DENY (FAIL-CLOSED)";
-        title.textContent = `${count} Zero-Trust Guardrail Violations Detected`;
-        meta.innerHTML = "latency: <strong>2.02 ms</strong> | engine: <strong>Cedar Rust</strong>";
+        vPill.className = "tag-pill tag-rose";
+        vPill.textContent = "DENY (FAIL-CLOSED)";
+        vTitle.textContent = `${count} Zero-Trust Guardrail Violations Detected`;
+        vTimer.innerHTML = "latency: <strong>2.02 ms</strong> | engine: <strong>Cedar</strong>";
       }
 
-      // Update Badge count
-      document.getElementById("findingsCountBadge").textContent = count;
+      document.getElementById("tabFindingsBadge").textContent = count;
 
-      // Populate Findings Table
+      // Render Findings
       const tbody = document.getElementById("findingsTableBody");
       if (violations.length === 0) {
         tbody.innerHTML = `
           <tr>
-            <td colspan="4" style="text-align: center; padding: 36px; color: #10b981;">
-              <div style="font-size: 14px; font-weight: 600; margin-bottom: 4px;">✅ 0 Policy Violations Found</div>
-              <div style="color: #64748b; font-size: 11px;">Template is 100% compliant with CloudSentinel Zero-Trust specifications.</div>
+            <td colspan="4" style="text-align: center; padding: 48px; color: #34d399;">
+              <div style="font-size: 15px; font-weight: 600; margin-bottom: 4px;">✅ 0 Policy Violations</div>
+              <div style="color: #71717a; font-size: 12px;">This template fully complies with formal AWS Cedar Zero-Trust policies.</div>
             </td>
           </tr>
         `;
       } else {
-        let html = "";
+        let rows = "";
         violations.forEach(v => {
-          const pillClass = v.severity === "CRITICAL" ? "pill-red" : (v.severity === "HIGH" ? "pill-amber" : "pill-blue");
-          html += `
+          const pill = v.severity === "CRITICAL" ? "tag-rose" : (v.severity === "HIGH" ? "tag-amber" : "tag-sky");
+          rows += `
             <tr>
-              <td><span class="metric-pill ${pillClass}">${v.severity}</span></td>
-              <td class="resource-cell">${v.resource_id}</td>
-              <td class="rule-cell">${v.rule_id}</td>
+              <td><span class="tag-pill ${pill}">${v.severity}</span></td>
+              <td><span class="code-tag-res">${v.resource_id}</span></td>
+              <td><span class="code-tag-rule">${v.rule_id}</span></td>
               <td>
-                <div class="reason-desc">${v.reason}</div>
-                <div class="recommendation-fix"><span class="fix-icon">↳</span> Fix: ${v.recommendation}</div>
+                <div class="finding-desc-text">${v.reason}</div>
+                <div class="finding-fix-text"><span class="fix-arrow">↳</span> Fix: ${v.recommendation}</div>
               </td>
             </tr>
           `;
         });
-        tbody.innerHTML = html;
+        tbody.innerHTML = rows;
       }
 
-      // Populate Diff
-      renderDiff(tpl.diff);
+      // Render Diff
+      renderDiffView(tpl.diff);
 
-      // Populate Sandbox Logs
-      renderLogs(tpl.logs);
+      // Render Logs
+      renderLogsView(tpl.logs);
 
-      // Populate Raw JSON
-      const jsonPayload = {
+      // Render JSON
+      const jsonDump = {
         compliant: isClean,
         violations_count: count,
         execution_time_ms: isClean ? 1.4 : 2.02,
         violations: violations
       };
-      document.getElementById("rawJsonOutput").textContent = JSON.stringify(jsonPayload, null, 2);
+      document.getElementById("rawJsonBlock").textContent = JSON.stringify(jsonDump, null, 2);
 
-      showToast(`Audit completed in ${jsonPayload.execution_time_ms} ms. Status: ${isClean ? 'ALLOW' : 'DENY'}`);
+      triggerToast(`Audit finished in ${jsonDump.execution_time_ms} ms. Status: ${isClean ? 'ALLOW' : 'DENY'}`);
     }
 
-    // Simulate in Moto Sandbox
     function simulateSandbox() {
       switchTab('logs');
-      const tpl = TEMPLATES[currentFileKey];
-      const isClean = (currentFileKey === "compliant_template.yaml" || isCurrentlyPatched);
-      renderLogs(isClean ? TEMPLATES["compliant_template.yaml"].logs : tpl.logs);
-
-      // Animate latency
-      document.getElementById("metricLatency").textContent = "1.4 ms";
-      showToast("Moto in-memory simulation finished successfully. Zero external network calls.");
+      const tpl = REPO_TEMPLATES[activeKey];
+      const isClean = (activeKey === "compliant_template.yaml" || isRemediated);
+      renderLogsView(isClean ? REPO_TEMPLATES["compliant_template.yaml"].logs : tpl.logs);
+      document.getElementById("metricLatencyNum").textContent = "1.4 ms";
+      triggerToast("Moto in-memory simulation finished. Synthesized in isolated memory.");
     }
 
-    // Apply Non-Destructive Remediation Patch
     function applyRemediationPatch() {
-      const tpl = TEMPLATES[currentFileKey];
+      const tpl = REPO_TEMPLATES[activeKey];
       if (!tpl.patched) {
-        showToast("Template is already hardened and compliant.");
+        triggerToast("Template is already hardened and compliant.");
         return;
       }
 
-      isCurrentlyPatched = true;
-      renderEditorContent(tpl.patched);
+      isRemediated = true;
+      renderCode(tpl.patched);
       switchTab('diff');
 
-      // Update diff header
-      document.getElementById("diffHeaderLine").innerHTML = `
-        <strong>[ATOMIC REMEDIATION APPLIED]</strong><br>
-        Backup archived at: <span style="color: #38bdf8;">.cloudguard/backups/${currentFileKey.replace('.', '_')}_backup.bak</span>
+      document.getElementById("diffMetaStrip").innerHTML = `
+        <span class="diff-badge-header">Unified Git Diff</span> <strong>[ATOMIC REMEDIATION APPLIED]</strong><br>
+        Backup archived at: <span style="color: #38bdf8;">.cloudguard/backups/${activeKey.replace('.', '_')}_backup.bak</span>
       `;
 
-      showToast("Remediation applied! Atomic backup created. Re-running zero-trust audit...");
+      triggerToast("Remediation applied! Atomic backup created. Re-running zero-trust audit...");
 
       setTimeout(() => {
         runZeroTrustAudit();
-      }, 500);
+      }, 450);
     }
 
-    // Diff renderer
-    function renderDiff(diffText) {
+    function renderDiffView(diffText) {
       const lines = diffText.split("\n");
       let html = "";
-      lines.forEach(line => {
-        if (line.startsWith("@@")) {
-          html += `<span class="diff-chunk">${escapeHtml(line)}</span><br>`;
-        } else if (line.startsWith("+")) {
-          html += `<span class="diff-add">${escapeHtml(line)}</span>`;
-        } else if (line.startsWith("-")) {
-          html += `<span class="diff-del">${escapeHtml(line)}</span>`;
+      lines.forEach(l => {
+        if (l.startsWith("@@")) {
+          html += `<span style="color: #38bdf8; display: block; margin: 4px 0;">${escapeHtml(l)}</span>`;
+        } else if (l.startsWith("+")) {
+          html += `<span class="diff-row-add">${escapeHtml(l)}</span>`;
+        } else if (l.startsWith("-")) {
+          html += `<span class="diff-row-del">${escapeHtml(l)}</span>`;
         } else {
-          html += `<span class="diff-normal">${escapeHtml(line)}</span>`;
+          html += `<span class="diff-row-ctx">${escapeHtml(l)}</span>`;
         }
       });
-      document.getElementById("diffContent").innerHTML = html;
+      document.getElementById("diffCodeContainer").innerHTML = html;
     }
 
-    // Log renderer
-    function renderLogs(logList) {
-      const container = document.getElementById("sandboxLogContent");
+    function renderLogsView(logArr) {
+      const box = document.getElementById("logStreamContainer");
       let html = "";
-      const now = new Date();
-      logList.forEach((line, i) => {
-        const timeStr = new Date(now.getTime() + i * 200).toISOString().substr(11, 8) + "." + (100 + i * 42);
-        let tagClass = "s3";
-        if (line.includes("[IAM]")) tagClass = "iam";
-        else if (line.includes("[EC2]")) tagClass = "ec2";
-        else if (line.includes("[Cost Waste]") || line.includes("[FinOps]")) tagClass = "finops";
-        else if (line.includes("Warning:") || line.includes("Notice:")) tagClass = "notice";
+      const base = new Date();
+      logArr.forEach((l, i) => {
+        const ts = new Date(base.getTime() + i * 200).toISOString().substr(11, 8) + "." + (100 + i * 35);
+        let tag = "tag-s3";
+        if (l.includes("[IAM]")) tag = "tag-iam";
+        else if (l.includes("[EC2]")) tag = "tag-ec2";
+        else if (l.includes("[FinOps]") || l.includes("[Cost Waste]")) tag = "tag-finops";
+        else if (l.includes("Warning:") || l.includes("Notice:")) tag = "tag-warn";
 
         html += `
-          <div class="log-line">
-            <span class="log-time">${timeStr}</span>
-            <span class="log-tag ${tagClass}">${escapeHtml(line)}</span>
+          <div class="log-item">
+            <span class="log-timestamp">${ts}</span>
+            <span class="${tag}">${escapeHtml(l)}</span>
           </div>
         `;
       });
-      container.innerHTML = html;
+      box.innerHTML = html;
     }
 
-    // Switch right panel tabs
-    function switchTab(tabId) {
+    function switchTab(id) {
       const tabs = ["findings", "diff", "logs", "json"];
       tabs.forEach(t => {
-        const btn = document.getElementById(`tab${capitalize(t)}Btn`);
-        const content = document.getElementById(`tab${capitalize(t)}`);
-        if (btn) btn.classList.toggle("active", t === tabId);
-        if (content) content.style.display = (t === tabId) ? "block" : "none";
+        const btn = document.getElementById(`tab${cap(t)}Btn`);
+        const view = document.getElementById(`view${cap(t)}`);
+        if (btn) btn.classList.toggle("active", t === id);
+        if (view) view.style.display = (t === id) ? "block" : "none";
       });
     }
 
-    function capitalize(str) {
-      return str.charAt(0).toUpperCase() + str.slice(1);
+    function cap(s) {
+      return s.charAt(0).toUpperCase() + s.slice(1);
     }
 
-    function escapeHtml(str) {
-      return str.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+    function escapeHtml(s) {
+      return s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
     }
 
-    function showToast(msg) {
-      const toast = document.getElementById("toastAlert");
-      document.getElementById("toastMessage").textContent = msg;
-      toast.classList.add("show");
+    function triggerToast(text) {
+      const toast = document.getElementById("appToast");
+      document.getElementById("toastText").textContent = text;
+      toast.classList.add("visible");
       setTimeout(() => {
-        toast.classList.remove("show");
+        toast.classList.remove("visible");
       }, 3500);
     }
 
-    // Initialize on page load
     window.addEventListener("DOMContentLoaded", () => {
       onFileChange();
     });

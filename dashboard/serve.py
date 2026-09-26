@@ -30,8 +30,8 @@ def run():
         except ValueError:
             pass
 
-    socketserver.TCPServer.allow_reuse_address = True
-    with socketserver.TCPServer(("", port), DashboardHandler) as httpd:
+    socketserver.ThreadingTCPServer.allow_reuse_address = True
+    with socketserver.ThreadingTCPServer(("", port), DashboardHandler) as httpd:
         print("=" * 60)
         print("🛡️  CloudSentinel Zero-Trust Web Dashboard")
         print(f"🚀 Running locally at: http://localhost:{port}")
