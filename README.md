@@ -74,6 +74,9 @@ flowchart TD
 ├── run_demo.py                      # Standalone visual test runner demonstrating scan workflow
 ├── pytest.ini                       # Pytest configuration
 ├── .gitignore                       # Clean production ignore rules
+├── dashboard/
+│   ├── index.html                   # High-density zero-trust web console
+│   └── serve.py                     # Local dashboard preview server
 ├── cloudsentinel/
 │   ├── __init__.py                  # Package exports
 │   ├── models.py                    # Pydantic v2 schemas & Enums (Severity, ActionRisk, ScanResult)
@@ -126,6 +129,26 @@ This launches the FastMCP Inspector UI (typically at `http://localhost:5173` or 
 1. `scan_infrastructure(file_path)`
 2. `simulate_in_sandbox(candidate_content, iac_format)`
 3. `apply_remediation(file_path, verified_content)`
+
+---
+
+## 📊 Launching the Web Dashboard
+
+CloudSentinel provides a high-density, professional engineering console for real-time IaC inspection, live Cedar policy auditing, unified diff rendering, and Moto sandbox telemetry:
+
+```bash
+# Launch via built-in dashboard preview runner
+python dashboard/serve.py 3000
+
+# Or via Python's standard HTTP server
+python -m http.server 3000 --directory dashboard
+```
+
+Open **`http://localhost:3000`** in any browser. It features:
+- Interactive file switcher (`vulnerable.json`, `insecure_template.yaml`, `compliant_template.yaml`)
+- 1-click **Zero-Trust Cedar Audit** with sub-2ms latency metrics
+- 1-click **Moto Sandbox Simulation** with simulated resource logs
+- 1-click **Non-Destructive Patch** with git-style unified diff & atomic `.cloudguard/backups/` tracking
 
 ---
 
