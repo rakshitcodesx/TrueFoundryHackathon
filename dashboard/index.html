@@ -42,6 +42,10 @@
       --sky-bg: rgba(14, 165, 233, 0.1);
       --sky-border: rgba(14, 165, 233, 0.25);
       --sky-text: #38bdf8;
+
+      --zinc-bg: rgba(113, 113, 122, 0.15);
+      --zinc-border: rgba(113, 113, 122, 0.3);
+      --zinc-text: #a1a1aa;
     }
 
     * {
@@ -299,6 +303,12 @@
       background: var(--sky-bg);
       border: 1px solid var(--sky-border);
       color: var(--sky-text);
+    }
+
+    .tag-zinc {
+      background: var(--zinc-bg);
+      border: 1px solid var(--zinc-border);
+      color: var(--zinc-text);
     }
 
     .card-subtext {
@@ -772,12 +782,12 @@
       </div>
 
       <div class="card">
-        <div class="card-label">FinOps Projected Savings</div>
+        <div class="card-label">ESTIMATED COST DELTA (INFRACOST MODEL)</div>
         <div class="card-metric-line">
-          <span class="card-number">$5,886 / yr</span>
-          <span class="tag-pill tag-emerald">-87.5% Compute</span>
+          <span class="card-number" id="metricCostDeltaNum">$0.00 / mo</span>
+          <span class="tag-pill tag-zinc" id="metricCostDeltaPill">BASELINE</span>
         </div>
-        <div class="card-subtext">EC2 Rightsizing: m5.4xlarge → m5.large</div>
+        <div class="card-subtext" id="metricCostDeltaSubtext">No compute instances in template (Storage baseline)</div>
       </div>
 
       <div class="card">
@@ -1117,7 +1127,13 @@ Resources:
     Properties:
       AvailabilityZone: us-east-1a
       Size: 100
-      VolumeType: gp3`,
+      VolumeType: gp3
+
+  OversizedAppServer:
+    Type: AWS::EC2::Instance
+    Properties:
+      InstanceType: m5.4xlarge
+      ImageId: ami-0c55b159cbfafe1f0`,
         patched: `# Patched equivalent available in examples/compliant_template.yaml`,
         diff: `@@ -6,4 +6,13 @@
    InsecureDataBucket:
@@ -1129,7 +1145,13 @@ Resources:
 +          - ServerSideEncryptionByDefault: { SSEAlgorithm: AES256 }
 +      PublicAccessBlockConfiguration:
 +        BlockPublicAcls: true
-+        BlockPublicPolicy: true`,
++        BlockPublicPolicy: true
+@@ -58,3 +67,3 @@
+   OversizedAppServer:
+     Type: AWS::EC2::Instance
+     Properties:
+-      InstanceType: m5.4xlarge
++      InstanceType: m5.large`,
         violations: [
           {
             severity: "HIGH",
@@ -1167,6 +1189,7 @@ Resources:
           "[IAM] Warning: Inline policy 'OverlyPermissiveWildcardPolicy' contains wildcard actions.",
           "[EC2] Warning: SG 'InsecurePublicSecurityGroup' allows open 0.0.0.0/0 ingress on port 22-22.",
           "[EC2] Warning: SG 'InsecurePublicSecurityGroup' allows open 0.0.0.0/0 ingress on port 80-80.",
+          "[FinOps] Infracost AST analysis: OversizedAppServer uses m5.4xlarge (16 vCPU, $560.50/mo). Rightsizing to m5.large (2 vCPU, $70.00/mo) yields -$490.50/mo delta (-87.5%).",
           "[Cost Waste] Identified orphaned EBS volume 'OrphanedStorageVolume' (vol-abf09e97, 100 GB). Projected monthly savings: $10.00."
         ]
       },
@@ -1332,6 +1355,39 @@ Resources:
         statusPill.className = "tag-pill tag-rose";
         statusPill.textContent = `${count} Critical`;
         statusSub.textContent = "AWS Cedar fail-closed evaluation";
+      }
+
+      // Update FinOps / Infracost Cost Delta Card
+      const costNum = document.getElementById("metricCostDeltaNum");
+      const costPill = document.getElementById("metricCostDeltaPill");
+      const costSub = document.getElementById("metricCostDeltaSubtext");
+
+      if (activeKey.includes("vulnerable.json")) {
+        costNum.textContent = "$0.00 / mo";
+        costNum.style.color = "var(--text-primary)";
+        costPill.className = "tag-pill tag-zinc";
+        costPill.textContent = "BASELINE";
+        costSub.textContent = "No compute instances in template (Storage baseline)";
+      } else if (activeKey.includes("insecure_template.yaml")) {
+        if (isRemediated) {
+          costNum.textContent = "Optimal";
+          costNum.style.color = "#34d399";
+          costPill.className = "tag-pill tag-zinc";
+          costPill.textContent = "ZERO WASTE";
+          costSub.textContent = "Resource allocations match minimal baseline";
+        } else {
+          costNum.textContent = "-$490.50 / mo";
+          costNum.style.color = "#34d399";
+          costPill.className = "tag-pill tag-emerald";
+          costPill.textContent = "8x Over-provisioned (-87.5%)";
+          costSub.textContent = "m5.4xlarge (16 vCPU) → m5.large (2 vCPU)";
+        }
+      } else if (activeKey.includes("compliant_template.yaml")) {
+        costNum.textContent = "Optimal";
+        costNum.style.color = "#34d399";
+        costPill.className = "tag-pill tag-zinc";
+        costPill.textContent = "ZERO WASTE";
+        costSub.textContent = "Resource allocations match minimal baseline";
       }
 
       // Update Verdict Bar
