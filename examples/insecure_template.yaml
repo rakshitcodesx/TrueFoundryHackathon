@@ -1,0 +1,56 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: CloudSentinel Example - Insecure AI-Generated Infrastructure Stack
+
+Resources:
+  # Vulnerability 1: S3 Bucket without server-side encryption and with public read access
+  InsecureDataBucket:
+    Type: AWS::S3::Bucket
+    Properties:
+      BucketName: insecure-ai-generated-data-lake
+      AccessControl: PublicRead
+
+  # Vulnerability 2: IAM Role granting AdministratorAccess and wildcard actions
+  InsecureDeploymentRole:
+    Type: AWS::IAM::Role
+    Properties:
+      RoleName: InsecureDeploymentAdminRole
+      AssumeRolePolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service: ec2.amazonaws.com
+            Action: sts:AssumeRole
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/AdministratorAccess
+      Policies:
+        - PolicyName: OverlyPermissiveWildcardPolicy
+          PolicyDocument:
+            Version: '2012-10-17'
+            Statement:
+              - Effect: Allow
+                Action: '*'
+                Resource: '*'
+
+  # Vulnerability 3: EC2 Security Group with unrestricted 0.0.0.0/0 ingress
+  InsecurePublicSecurityGroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: Public web access security group with open ingress
+      SecurityGroupIngress:
+        - IpProtocol: tcp
+          FromPort: 22
+          ToPort: 22
+          CidrIp: 0.0.0.0/0
+        - IpProtocol: tcp
+          FromPort: 80
+          ToPort: 80
+          CidrIp: 0.0.0.0/0
+
+  # Vulnerability 4: Unattached / Orphaned EBS Volume causing cloud cost waste
+  OrphanedStorageVolume:
+    Type: AWS::EC2::Volume
+    Properties:
+      AvailabilityZone: us-east-1a
+      Size: 100
+      VolumeType: gp3

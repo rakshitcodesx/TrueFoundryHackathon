@@ -1,0 +1,75 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: CloudSentinel Example - Hardened Zero-Trust Infrastructure Stack
+
+Resources:
+  # Hardened 1: S3 Bucket with AES256 server-side encryption and full PublicAccessBlock
+  SecureDataBucket:
+    Type: AWS::S3::Bucket
+    Properties:
+      BucketName: compliant-zero-trust-data-lake
+      BucketEncryption:
+        ServerSideEncryptionConfiguration:
+          - ServerSideEncryptionByDefault:
+              SSEAlgorithm: AES256
+      PublicAccessBlockConfiguration:
+        BlockPublicAcls: true
+        BlockPublicPolicy: true
+        IgnorePublicAcls: true
+        RestrictPublicBuckets: true
+
+  # Hardened 2: Scoped IAM Role with least-privilege permissions and specific resource ARN
+  ScopedApplicationRole:
+    Type: AWS::IAM::Role
+    Properties:
+      RoleName: ScopedMicroserviceApplicationRole
+      AssumeRolePolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service: ec2.amazonaws.com
+            Action: sts:AssumeRole
+      Policies:
+        - PolicyName: LeastPrivilegeS3ReadOnlyPolicy
+          PolicyDocument:
+            Version: '2012-10-17'
+            Statement:
+              - Effect: Allow
+                Action:
+                  - s3:GetObject
+                  - s3:ListBucket
+                Resource:
+                  - arn:aws:s3:::compliant-zero-trust-data-lake
+                  - arn:aws:s3:::compliant-zero-trust-data-lake/*
+
+  # Hardened 3: Security Group with restricted ingress limited to internal VPC CIDR block
+  HardenedInternalSecurityGroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: Hardened internal application tier security group
+      SecurityGroupIngress:
+        - IpProtocol: tcp
+          FromPort: 443
+          ToPort: 443
+          CidrIp: 10.0.0.0/16
+
+  # Hardened 4: Attached EBS Volume with VolumeAttachment (no cost waste)
+  CompliantApplicationServer:
+    Type: AWS::EC2::Instance
+    Properties:
+      InstanceType: t3.micro
+      ImageId: ami-0c55b159cbfafe1f0
+
+  CompliantStorageVolume:
+    Type: AWS::EC2::Volume
+    Properties:
+      AvailabilityZone: us-east-1a
+      Size: 50
+      VolumeType: gp3
+
+  CompliantVolumeAttachment:
+    Type: AWS::EC2::VolumeAttachment
+    Properties:
+      Device: /dev/sdf
+      InstanceId: !Ref CompliantApplicationServer
+      VolumeId: !Ref CompliantStorageVolume
